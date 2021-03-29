@@ -8,21 +8,27 @@ import { Link } from 'react-router-dom'
 
 
 const Shop = () => {   
-    const first10 = fakeData.slice(0,10);
-    const [products,setProduct] = useState(first10);
-    const [cart, setCart] = useState([])
+    // const first10 = fakeData.slice(0,10);
+    const [products,setProduct] = useState([]);
+    const [cart, setCart] = useState([]);
+
+    useEffect(()=>{
+        fetch('https://vast-meadow-86282.herokuapp.com/products')
+        .then(res =>res.json())
+        .then(data =>setProduct(data))
+    },[])
 
     useEffect(() => {
         const saveCart = getDatabaseCart();
         const productKeys = Object.keys(saveCart);
-        const previousCart = productKeys.map(existingkey => {
-            const product = fakeData.find(pd=> pd.key === existingkey)
-            product.quantity = saveCart[existingkey];
-            return product;
-
+        console.log(products, productKeys)
+        fetch('https://vast-meadow-86282.herokuapp.com/productsByKey',{
+            method:'POST',
+            headers:{'Content-Type':'application/json'  },
+            body:JSON.stringify(productKeys)
         })
-
-        setCart(previousCart);
+        .then(res=>res.json())
+        .then(data =>setCart(data))
        
     }, [])
 

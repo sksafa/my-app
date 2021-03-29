@@ -19,8 +19,6 @@ const Review = () => {
 
     }
     
-
-
     const removeProduct = (productKey) =>{
         const newCArt = cart.filter(pd => pd.key !== productKey);
         setCart(newCArt);
@@ -32,12 +30,21 @@ const Review = () => {
         //cart
         const saveCart = getDatabaseCart();
         const productKey = Object.keys(saveCart);
-        const cartProducts = productKey.map(key => {
-            const product = fakeData.find(pd => pd.key === key);
-            product.quantity = saveCart[key];
-            return product;
-        });
-        setCart(cartProducts);
+
+        fetch('https://vast-meadow-86282.herokuapp.com/productsByKey',{
+            method:'POST',
+            headers:{'Content-Type':'application/json'  },
+            body:JSON.stringify(productKey)
+        })
+        .then(res=>res.json())
+        .then(data =>setCart(data))
+
+        // const cartProducts = productKey.map(key => {
+        //     const product = fakeData.find(pd => pd.key === key);
+        //     product.quantity = saveCart[key];
+        //     return product;
+        // });
+        // setCart(cartProducts);
     }, [])
     
     let thankyou;

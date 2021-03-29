@@ -1,10 +1,27 @@
 import React from 'react';
+import fakeData from '../../fakeData';
+
 
 const Inventory = () => {
+    const handelAddProduct =()=>{
+        const product = {}
+        fetch('https://vast-meadow-86282.herokuapp.com/addProduct',{
+            method:'POST',
+            headers:{'Content-Type': 'application/json'},
+            body: JSON.stringify(fakeData)
+
+        })
+    }
     return (
         <div>
-            <h1>This page is inventory Management page </h1>
-            <p>Developer is sleeping now and comming soon</p>
+            <form action="">
+                <p><span>Name</span><input type="text"/></p>
+                <p><span>Price:</span><input type="text"/></p>
+                <p><span>Quantity</span><input type="text"/></p>
+                <p><span>Upload Image</span><input type="file"/></p>
+            <button onClick={handelAddProduct}>Add Product</button>
+            </form>
+            
         </div>
     );
 };
